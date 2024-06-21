@@ -1,0 +1,77 @@
+CREATE DATABASE IF NOT EXISTS bd_ropa;
+USE bd_ropa;
+
+-- tabla t_usuario
+CREATE TABLE IF NOT EXISTS t_usuario (
+    usuario VARCHAR(20) NOT NULL,
+    contra VARCHAR(20) NOT NULL,
+    correo VARCHAR(50) NOT NULL,
+    PRIMARY KEY (usuario)
+);
+
+-- tabla t_venta
+CREATE TABLE IF NOT EXISTS t_venta (
+    id_venta INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(20) NOT NULL,
+    producto VARCHAR(100) NOT NULL,
+    cantidad INT NOT NULL,
+    precio DECIMAL(10, 2) NOT NULL,
+    fecha_venta DATE NOT NULL,
+    FOREIGN KEY (usuario) REFERENCES t_usuario(usuario)
+);
+
+-- tabla t_personas
+CREATE TABLE IF NOT EXISTS t_personas (
+    id_persona INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(20) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    fecha_registro DATE NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'Activo',
+    fecha_fin_registro DATE,
+    flag_cambiar_contra BOOLEAN NOT NULL DEFAULT TRUE,
+    flag_bloqueo BOOLEAN NOT NULL DEFAULT FALSE,
+    intentos_fallidos INT NOT NULL DEFAULT 0,
+    caducidad_contra DATE,
+    correo VARCHAR(50) NOT NULL,
+    direccion VARCHAR(200) NOT NULL,
+    celular VARCHAR(15),
+    observacion TEXT,
+    FOREIGN KEY (usuario) REFERENCES t_usuario(usuario)
+);
+
+-- tabla t_reclamos
+CREATE TABLE IF NOT EXISTS t_reclamos (
+    id_reclamo INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(20) NOT NULL,
+    tipo_producto VARCHAR(50) NOT NULL,
+    categoria VARCHAR(50) NOT NULL,
+    condicion VARCHAR(150) NOT NULL,
+    fecha_ingreso DATE NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'Pendiente',
+    FOREIGN KEY (usuario) REFERENCES t_usuario(usuario)
+);
+
+-- tabla t_especialistas
+CREATE TABLE IF NOT EXISTS t_especialistas (
+    id_especialista INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_completo VARCHAR(100) NOT NULL,
+    cargo VARCHAR(50) NOT NULL,
+    area_especializacion VARCHAR(50) NOT NULL,
+    disponibilidad VARCHAR(50) NOT NULL,
+    correo VARCHAR(50) NOT NULL,
+    telefono VARCHAR(15) NOT NULL
+);
+-- tabla t_evaluaciones 
+CREATE TABLE IF NOT EXISTS t_evaluaciones (
+    id_evaluacion INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(20) NOT NULL,
+    tipo_evaluacion VARCHAR(50) NOT NULL,
+    comentario VARCHAR(255),
+    calificacion INT,
+    fecha_evaluacion DATE NOT NULL,
+    FOREIGN KEY (usuario) REFERENCES t_usuario(usuario)
+);
+
+INSERT INTO t_usuario (usuario, contra, correo) VALUES ('admin', 'Admin967', 'administrador@ropa.pe');
+INSERT INTO t_usuario (usuario, contra, correo) VALUES ('usuario', 'Usuario431', 'usuario@ropa.pe');
